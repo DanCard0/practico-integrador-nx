@@ -1,0 +1,16 @@
+AssignCard:
+  handler: src/create-card/handler/assign-card.handler
+  name: ${file(resource/index.json):card.assignCard}
+  environment:
+    CLIENTS_TABLE: ${file(resource/index.json):client.clientsTable}
+  iamRoleStatementsInherit: true
+  iamRoleStatementsName: ${file(resource/index.json):card.assignCard}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:UpdateItem
+      Resource:
+        - !GetAtt ClientsTable.Arn
+  events:
+    - sqs:
+        arn: !GetAtt CreateCardQueue.Arn

@@ -1,0 +1,54 @@
+Resources:
+  CreateCardQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: ${file(resource/index.json):client.createCard}
+  
+  CreateGiftQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: ${file(resource/index.json):client.createGift}
+  
+  CreateCardQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties: 
+      PolicyDocument: 
+        Statement:
+          - Effect: Allow
+            Action: 
+              - SQS:*
+            Resource: !GetAtt CreateCardQueue.Arn
+            Principal:
+              AWS:
+                - !Ref AWS::AccountId
+          - Effect: Allow
+            Principal:
+              AWS: 
+                - '*'
+            Action: 
+              - SQS:SendMessage
+            Resource: !GetAtt CreateCardQueue.Arn
+      Queues: 
+        - !Ref CreateCardQueue
+  
+  CreateGiftQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties: 
+      PolicyDocument: 
+        Statement:
+          - Effect: Allow
+            Action: 
+              - SQS:*
+            Resource: !GetAtt CreateGiftQueue.Arn
+            Principal:
+              AWS:
+                - !Ref AWS::AccountId
+          - Effect: Allow
+            Principal:
+              AWS: 
+                - '*'
+            Action: 
+              - SQS:SendMessage
+            Resource: !GetAtt CreateGiftQueue.Arn
+      Queues: 
+        - !Ref CreateGiftQueue

@@ -1,0 +1,107 @@
+CreateClient:
+  handler: src/create-client/handler/create-client.handler
+  name: ${file(resource/index.json):client.createClient}
+  environment:
+    CLIENTS_TABLE: ${file(resource/index.json):client.clientsTable}
+    CLIENTS_CREATED_TOPIC: ${file(resource/index.json):client.clientCreatedTopic}
+  iamRoleStatementsInherit: true
+  iamRoleStatementsName: ${file(resource/index.json):client.createClient}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource:
+        - !Ref ClientCreatedTopic
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource:
+        - !GetAtt ClientsTable.Arn
+  events:
+    - http:
+        path: /client
+        method: post
+        cors: true
+
+DeleteClient:
+  handler: src/create-client/handler/delete-client.handler
+  name: ${file(resource/index.json):deleteClient.delete}
+  environment:
+    CLIENTS_TABLE: ${file(resource/index.json):client.clientsTable}
+  iamRoleStatementsInherit: true
+  iamRoleStatementsName: ${file(resource/index.json):deleteClient.delete}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:UpdateItem
+      Resource:
+        - !GetAtt ClientsTable.Arn
+  events:
+    - http:
+        path: /status
+        method: post
+        cors: true
+
+GetClient:
+  handler: src/create-client/handler/get-client.handler
+  name: ${file(resource/index.json):getClient.get}
+  environment:
+    CLIENTS_TABLE: ${file(resource/index.json):client.clientsTable}
+  iamRoleStatementsInherit: true
+  iamRoleStatementsName: ${file(resource/index.json):getClient.get}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+      Resource:
+        - !GetAtt ClientsTable.Arn
+  events:
+    - http:
+        path: /client
+        method: get
+        cors: true
+
+GetAllClient:
+  handler: src/create-client/handler/getAll-client.handler
+  name: ${file(resource/index.json):getAllClient.getAll}
+  environment:
+    CLIENTS_TABLE: ${file(resource/index.json):client.clientsTable}
+  iamRoleStatementsInherit: true
+  iamRoleStatementsName: ${file(resource/index.json):getAllClient.getAll}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+      Resource:
+        - !GetAtt ClientsTable.Arn
+  events:
+    - http:
+        path: /clients
+        method: get
+        cors: true
+
+UpdateClient:
+  handler: src/create-client/handler/update-client.handler
+  name: ${file(resource/index.json):update.updateClient}
+  environment:
+    CLIENTS_TABLE: ${file(resource/index.json):client.clientsTable}
+    CLIENTS_CREATED_TOPIC: ${file(resource/index.json):client.clientCreatedTopic}
+  iamRoleStatementsInherit: true
+  iamRoleStatementsName: ${file(resource/index.json):update.updateClient}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource:
+        - !Ref ClientCreatedTopic
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+      Resource:
+        - !GetAtt ClientsTable.Arn
+  events:
+    - http:
+        path: /client
+        method: patch
+        cors: true

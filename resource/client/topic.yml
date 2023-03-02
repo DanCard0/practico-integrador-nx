@@ -1,0 +1,22 @@
+Resources:
+  ClientCreatedTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: Client Created Topic
+      TopicName: ${file(resource/index.json):client.clientCreatedTopic}
+  
+  ClientCreatedSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref ClientCreatedTopic
+      Endpoint: !GetAtt CreateCardQueue.Arn
+      Protocol: "sqs"
+      RawMessageDelivery: "true"
+  
+  ClientCreatedSubscriptionGift:
+    Type: "AWS::SNS::Subscription"
+    Properties:
+      TopicArn: !Ref ClientCreatedTopic
+      Endpoint: !GetAtt CreateGiftQueue.Arn
+      Protocol: "sqs"
+      RawMessageDelivery: "true"

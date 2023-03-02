@@ -1,0 +1,16 @@
+assignGift:
+  handler: src/create-gift/handler/assign-gift.handler
+  name: ${file(resource/index.json):gift.assignGift}
+  environment:
+    CLIENTS_TABLE: ${file(resource/index.json):client.clientsTable}
+  iamRoleStatementsInherit: true
+  iamRoleStatementsName: ${file(resource/index.json):gift.assignGift}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:UpdateItem
+      Resource:
+        - !GetAtt ClientsTable.Arn
+  events:
+    - sqs:
+        arn: !GetAtt CreateGiftQueue.Arn

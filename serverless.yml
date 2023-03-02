@@ -1,0 +1,38 @@
+service: danielCardozo-practicoIntegrador
+frameworkVersion: "3"
+
+plugins:
+  - serverless-iam-roles-per-function
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  tags:
+    project: "${self:service}"
+  tracing:
+    lambda: true
+    apiGateway: true
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: "*"
+  environment:
+    CONTEXT: EBASED_CREATE_CLIENT
+    LOG_LEVEL: INFO
+
+custom:
+  stackPrefix: "${self:service}-${self:provider.stage}"
+
+functions:
+  - ${file(src/create-client/index.yml)}
+  - ${file(src/create-card/index.yml)}
+  - ${file(src/create-gift/index.yml)}
+  - ${file(src/orders/index.yml)}
+resources:
+  - ${file(resource/client/dynamodb.yml)}
+  - ${file(resource/client/topic.yml)}
+  - ${file(resource/client/queue.yml)}

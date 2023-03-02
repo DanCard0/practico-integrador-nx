@@ -1,0 +1,31 @@
+{
+  "client": {
+    "createClient": "${self:custom.stackPrefix}-create-client-function",
+    "clientsTable": "${self:custom.stackPrefix}-client-table",
+    "clientCreatedTopic": "${self:custom.stackPrefix}-client-created-topic",
+    "createCard": "${self:custom.stackPrefix}-create-card-queue",
+    "createGift":"${self:custom.stackPrefix}-create-gift-queue"
+  },
+  "deleteClient":{
+    "delete": "${self:custom.stackPrefix}-delete-client-function"
+  },
+  "card":{
+    "assignCard": "${self:custom.stackPrefix}-assign-card"
+  },
+  "gift":{
+    "assignGift": "${self:custom.stackPrefix}-assign-gift"
+  },
+  "getClient":{
+    "get": "${self:custom.stackPrefix}-get-client-function"
+  },
+  "getAllClient":{
+    "getAll": "${self:custom.stackPrefix}-getAll-client-function"
+  },
+  "update":{
+    "updateClient": "${self:custom.stackPrefix}-update-client-function"
+  },
+  "order":{
+    "createOrder":"${self:custom.stackPrefix}-create-order",
+    "purchasesTable": "${self:custom.stackPrefix}-purchases-table"
+  }
+}

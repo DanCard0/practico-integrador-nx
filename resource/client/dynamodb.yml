@@ -1,0 +1,28 @@
+Resources:
+  ClientsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${file(resource/index.json):client.clientsTable}
+      AttributeDefinitions:
+        - AttributeName: dni
+          AttributeType: S
+      KeySchema:
+        - AttributeName: dni
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  
+  PurchasesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${file(resource/index.json):order.purchasesTable}
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

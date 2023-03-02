@@ -1,0 +1,28 @@
+createOrder:
+  handler: src/orders/handler/create-order.handler
+  name: ${file(resource/index.json):order.createOrder}
+  environment:
+    CLIENTS_TABLE: ${file(resource/index.json):client.clientsTable}
+    PURCHASES_TABLE: ${file(resource/index.json):order.purchasesTable}
+  iamRoleStatementsInherit: true
+  iamRoleStatementsName: ${file(resource/index.json):order.createOrder}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:UpdateItem
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+      Resource:
+        - !GetAtt ClientsTable.Arn
+    - Effect: Allow
+      Action:
+        - dynamodb:UpdateItem
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+      Resource:
+        - !GetAtt PurchasesTable.Arn
+  events:
+    - http:
+        path: /order
+        method: post
+        cors: true

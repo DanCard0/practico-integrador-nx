@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "ebased": "^1.6.2",
+    "serverless-iam-roles-per-function": "^3.2.0"
+  }
+}
